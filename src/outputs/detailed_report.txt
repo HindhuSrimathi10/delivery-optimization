@@ -1,0 +1,24 @@
+================================================================================
+DELIVERY OPTIMIZATION DETAILED REPORT
+Generated: 2026-03-29 07:57:45
+================================================================================
+
+OPTIMIZATION STATISTICS
+----------------------------------------
+Total Deliveries: 50
+Total Distance: 844.40 km
+Balance Score: 99.92%
+
+AGENT DISTANCES
+----------------------------------------
+Agent 1: 281.30 km (16 deliveries)
+Agent 2: 281.22 km (17 deliveries)
+Agent 3: 281.88 km (17 deliveries)
+
+PRIORITY DISTRIBUTION PER AGENT
+----------------------------------------
+Agent 1: High=3, Medium=6, Low=7
+Agent 2: High=1, Medium=8, Low=8
+Agent 3: High=6, Medium=4, Low=7
+
+================================================================================
