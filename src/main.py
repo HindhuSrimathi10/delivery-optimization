@@ -1,12 +1,9 @@
-"""
-Main execution module for delivery optimization
-"""
+
 import sys
 import os
 import logging
 from datetime import datetime
 
-# Add src to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data_transformer import AmazonDeliveryTransformer
@@ -14,7 +11,7 @@ from src.dp_optimizer import DPOptimizer
 from src.output_generator import OutputGenerator
 
 def setup_logging():
-    """Configure logging for the application"""
+    
     log_dir = "logs"
     os.makedirs(log_dir, exist_ok=True)
     
@@ -32,7 +29,7 @@ def setup_logging():
     return logging.getLogger(__name__)
 
 def create_sample_data_if_needed():
-    """Create sample data if real data not available"""
+
     import pandas as pd
     import numpy as np
     
@@ -63,10 +60,8 @@ def create_sample_data_if_needed():
     
     df = pd.DataFrame(data)
     
-    # Create data directory
     os.makedirs("data", exist_ok=True)
     
-    # Save sample data
     sample_file = "data/sample_delivery_data.csv"
     df.to_csv(sample_file, index=False)
     
@@ -77,26 +72,23 @@ def create_sample_data_if_needed():
     return sample_file
 
 def main():
-    """Main execution function"""
-    # Setup logging
+    
     logger = setup_logging()
     
     try:
-        # Configuration
-        input_file = "data/amazon_delivery_dataset.csv"  # Your downloaded dataset
+        
+        input_file = "data/amazon_delivery_dataset.csv"  
         output_file = "data/delivery_locations.csv"
         
         logger.info("="*80)
         logger.info("DELIVERY OPTIMIZATION SYSTEM")
         logger.info("="*80)
         
-        # Check if input file exists
         if not os.path.exists(input_file):
             logger.warning(f"File not found: {input_file}")
             input_file = create_sample_data_if_needed()
             output_file = "data/delivery_locations.csv"
         
-        # Step 1: Transform the dataset
         logger.info("\nSTEP 1: Transforming Delivery Dataset")
         logger.info("-"*40)
         
@@ -117,32 +109,26 @@ def main():
         optimizer.setup(transformed_df)
         agents = optimizer.solve_optimal()
         
-        # Step 3: Generate outputs
+    
         logger.info("\nSTEP 3: Generating Output Files")
         logger.info("-"*40)
         
         generator = OutputGenerator(optimizer.agents, optimizer.agent_distances)
         
-        # Generate delivery plan
+    
         delivery_plan = generator.generate_delivery_plan()
         
-        # Generate agent summary
         agent_summary = generator.generate_agent_summary()
         
-        # Print summary to console
         generator.print_summary()
         
-        # Get balance score
         balance_score = optimizer.get_balance_score()
         
-        # Get statistics
         stats = optimizer.get_statistics()
         
-        # Step 4: Save detailed report
         logger.info("\nSTEP 4: Saving Detailed Report")
         logger.info("-"*40)
         
-        # Create a detailed report file
         report_file = "outputs/detailed_report.txt"
         with open(report_file, 'w') as f:
             f.write("="*80 + "\n")
@@ -171,7 +157,6 @@ def main():
         
         logger.info(f"Detailed report saved to: {report_file}")
         
-        # Step 5: Print final status
         logger.info("\n" + "="*80)
         logger.info("OPTIMIZATION COMPLETED SUCCESSFULLY!")
         logger.info("="*80)
@@ -187,7 +172,6 @@ def main():
         logger.info(f"   • Total Distance: {stats['total_distance']:.2f} km")
         logger.info(f"   • Average per Agent: {(stats['total_distance']/3):.2f} km")
         
-        # Performance assessment
         if balance_score >= 0.95:
             logger.info("\nEXCELLENT! Workload is perfectly balanced!")
         elif balance_score >= 0.90:
@@ -214,7 +198,6 @@ def main():
         raise
 
 if __name__ == "__main__":
-    # Run the main function
     agents, distances = main()
     
     print("\n" + "="*80)
