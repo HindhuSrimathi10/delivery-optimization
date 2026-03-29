@@ -66,6 +66,3 @@ Higher score = better balance. Target: 95%+
 
 
 
-**Why:** Fixes any remaining imbalance from the greedy phase.
-
-### Balance Calculation
