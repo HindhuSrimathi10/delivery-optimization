@@ -26,38 +26,29 @@ class DPOptimizer:
         self.total_distance = 0
         
     def setup(self, deliveries_df: pd.DataFrame):
-        """
-        Setup optimizer with sorted deliveries
+       
         
-        Args:
-            deliveries_df: DataFrame with Location_ID, Distance_km, Priority columns
-        """
-        # Extract data
         self.location_ids = deliveries_df['Location_ID'].tolist()
         self.distances = deliveries_df['Distance_km'].tolist()
         self.priorities = deliveries_df['Priority'].tolist()
         self.n_deliveries = len(self.distances)
         self.total_distance = sum(self.distances)
         
-        # Convert to integer for DP (multiply by 100 to handle decimals)
         self.scaled_distances = [int(d * 100) for d in self.distances]
         
-        logger.info(f"🎯 DP Optimizer setup with {self.n_deliveries} deliveries")
-        logger.info(f"📊 Total distance: {self.total_distance:.2f} km")
+        logger.info(f" DP Optimizer setup with {self.n_deliveries} deliveries")
+        logger.info(f"Total distance: {self.total_distance:.2f} km")
         
     def solve_optimal(self) -> Dict[int, List[Dict]]:
-        """
-        Solve the assignment problem optimally using DP or heuristic
-        """
+        
         if self.n_deliveries == 0:
             return self.agents
         
-        # For small datasets, use exact DP
         if self.n_deliveries <= 30:
-            logger.info("🔍 Using exact DP algorithm for optimal assignment")
+            logger.info("Using exact DP algorithm for optimal assignment")
             return self._solve_exact_dp()
         else:
-            logger.info("⚡ Dataset too large for exact DP, using LPT heuristic")
+            logger.info(" Dataset too large for exact DP, using LPT heuristic")
             return self._solve_heuristic()
     
     def _solve_exact_dp(self) -> Dict[int, List[Dict]]:
@@ -67,14 +58,9 @@ class DPOptimizer:
         scaled_dists = self.scaled_distances
         total_scaled = sum(scaled_dists)
         
-        # Create memoization cache
         @lru_cache(maxsize=None)
         def dp(idx: int, agent1_dist: int, agent2_dist: int) -> Tuple[int, int, int]:
-            """
-            Recursive DP function with decision tracking
             
-            Returns: (min_makespan, best_assignment_for_agent1, best_assignment_for_agent2)
-            """
             if idx == self.n_deliveries:
                 agent3_dist = total_scaled - agent1_dist - agent2_dist
                 makespan = max(agent1_dist, agent2_dist, agent3_dist)
@@ -107,7 +93,7 @@ class DPOptimizer:
         optimal_makespan_scaled, _, _ = dp(0, 0, 0)
         optimal_makespan = optimal_makespan_scaled / 100
         
-        logger.info(f"✨ Optimal makespan found: {optimal_makespan:.2f} km")
+        logger.info(f"Optimal makespan found: {optimal_makespan:.2f} km")
         
         # Reconstruct assignment using decisions stored in DP
         self._reconstruct_assignment_dp()
