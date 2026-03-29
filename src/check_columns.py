@@ -1,12 +1,8 @@
-"""
-Check the actual column names in your dataset
-"""
+
 import pandas as pd
 
-# Load your dataset
 df = pd.read_csv("D:\\delivery-optimization\\data\\amazon_delivery.csv")
 
-# Print all column names
 print("="*60)
 print("COLUMN NAMES IN YOUR DATASET:")
 print("="*60)
