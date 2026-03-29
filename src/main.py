@@ -36,7 +36,7 @@ def create_sample_data_if_needed():
     import pandas as pd
     import numpy as np
     
-    print("\n⚠️  Real dataset not found. Creating sample data for testing...")
+    print("\n  Real dataset not found. Creating sample data for testing...")
     
     np.random.seed(42)
     n_samples = 50
@@ -70,7 +70,7 @@ def create_sample_data_if_needed():
     sample_file = "data/sample_delivery_data.csv"
     df.to_csv(sample_file, index=False)
     
-    print(f"✅ Sample data created: {sample_file}")
+    print(f"Sample data created: {sample_file}")
     print(f"   Total deliveries: {len(df)}")
     print(f"   Priority distribution:\n{df['Priority'].value_counts()}")
     
@@ -87,7 +87,7 @@ def main():
         output_file = "data/delivery_locations.csv"
         
         logger.info("="*80)
-        logger.info("🚚 DELIVERY OPTIMIZATION SYSTEM")
+        logger.info("DELIVERY OPTIMIZATION SYSTEM")
         logger.info("="*80)
         
         # Check if input file exists
@@ -97,13 +97,11 @@ def main():
             output_file = "data/delivery_locations.csv"
         
         # Step 1: Transform the dataset
-        logger.info("\n📥 STEP 1: Transforming Delivery Dataset")
+        logger.info("\nSTEP 1: Transforming Delivery Dataset")
         logger.info("-"*40)
         
         transformer = AmazonDeliveryTransformer()
         
-        # You can specify a warehouse location or let it use the first store
-        # Example: transformer = AmazonDeliveryTransformer(warehouse_coords=(12.9716, 77.5946))
         
         transformed_df = transformer.run_transformation(
             input_file=input_file,
@@ -111,8 +109,8 @@ def main():
             priority_method='balanced'  # Try 'balanced', 'time_sensitive', 'traffic_based', 'category_based'
         )
         
-        # Step 2: Run optimization
-        logger.info("\n🎯 STEP 2: Running DP Optimization")
+        
+        logger.info("\n STEP 2: Running DP Optimization")
         logger.info("-"*40)
         
         optimizer = DPOptimizer()
@@ -120,7 +118,7 @@ def main():
         agents = optimizer.solve_optimal()
         
         # Step 3: Generate outputs
-        logger.info("\n📄 STEP 3: Generating Output Files")
+        logger.info("\nSTEP 3: Generating Output Files")
         logger.info("-"*40)
         
         generator = OutputGenerator(optimizer.agents, optimizer.agent_distances)
@@ -141,7 +139,7 @@ def main():
         stats = optimizer.get_statistics()
         
         # Step 4: Save detailed report
-        logger.info("\n📊 STEP 4: Saving Detailed Report")
+        logger.info("\nSTEP 4: Saving Detailed Report")
         logger.info("-"*40)
         
         # Create a detailed report file
@@ -171,47 +169,47 @@ def main():
             
             f.write("\n" + "="*80 + "\n")
         
-        logger.info(f"✅ Detailed report saved to: {report_file}")
+        logger.info(f"Detailed report saved to: {report_file}")
         
         # Step 5: Print final status
         logger.info("\n" + "="*80)
-        logger.info("✅ OPTIMIZATION COMPLETED SUCCESSFULLY!")
+        logger.info("OPTIMIZATION COMPLETED SUCCESSFULLY!")
         logger.info("="*80)
         
-        logger.info("\n📁 OUTPUT FILES GENERATED:")
+        logger.info("\nOUTPUT FILES GENERATED:")
         logger.info("   • outputs/delivery_plan.csv - Detailed delivery assignments")
         logger.info("   • outputs/agent_summary.csv - Summary per agent")
         logger.info("   • outputs/detailed_report.txt - Complete analysis report")
         logger.info(f"   • {output_file} - Transformed dataset")
         
-        logger.info("\n📊 PERFORMANCE METRICS:")
+        logger.info("\nPERFORMANCE METRICS:")
         logger.info(f"   • Balance Score: {balance_score:.2%}")
         logger.info(f"   • Total Distance: {stats['total_distance']:.2f} km")
         logger.info(f"   • Average per Agent: {(stats['total_distance']/3):.2f} km")
         
         # Performance assessment
         if balance_score >= 0.95:
-            logger.info("\n🎉 EXCELLENT! Workload is perfectly balanced!")
+            logger.info("\nEXCELLENT! Workload is perfectly balanced!")
         elif balance_score >= 0.90:
-            logger.info("\n👍 GOOD! Workload is well balanced.")
+            logger.info("\nGOOD! Workload is well balanced.")
         elif balance_score >= 0.80:
-            logger.info("\n⚠️  FAIR: Workload balance could be improved.")
+            logger.info("\n FAIR: Workload balance could be improved.")
         else:
-            logger.info("\n❌ POOR: Consider adjusting priority weights.")
+            logger.info("\nPOOR: Consider adjusting priority weights.")
         
         logger.info("\n" + "="*80)
         
         return optimizer.agents, optimizer.agent_distances
         
     except FileNotFoundError as e:
-        logger.error(f"❌ File not found: {e}")
-        print("\n💡 TIP: Make sure your dataset is in the 'data' folder")
+        logger.error(f"File not found: {e}")
+        print("\nTIP: Make sure your dataset is in the 'data' folder")
         print("   Expected location: data/amazon_delivery_dataset.csv")
         print("   Or run: python create_sample_data.py to generate test data")
         raise
         
     except Exception as e:
-        logger.error(f"❌ Optimization failed: {e}")
+        logger.error(f"Optimization failed: {e}")
         logger.exception("Detailed error trace:")
         raise
 
@@ -220,7 +218,7 @@ if __name__ == "__main__":
     agents, distances = main()
     
     print("\n" + "="*80)
-    print("🎯 OPTIMIZATION COMPLETE")
+    print("OPTIMIZATION COMPLETE")
     print("="*80)
     print("\nTo view results:")
     print("  1. Check the 'outputs' folder for CSV files")
